@@ -10,18 +10,7 @@ public class Converter {
     }
 
     public static short getMonthNumberFromFileName(String fileName) {
-        String[] fileNameContent = fileName.split("");
-        int firstMonthlyDigit = Short.parseShort(fileNameContent[6]);
-        int secondMonthlyDigit = Short.parseShort(fileNameContent[7]);
-
-        if (firstMonthlyDigit == 0)
-            return Short.parseShort(fileNameContent[7]);
-        else if (secondMonthlyDigit == 0)
-            return 10;
-        else if (secondMonthlyDigit == 1)
-            return 11;
-        else
-            return 12;
+        return Short.parseShort(fileName.substring(6, 8));
     }
 
     public static String getMonthNameByMonthNumber(short number) {
