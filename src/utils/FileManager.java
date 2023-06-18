@@ -24,7 +24,7 @@ public class FileManager {
         }
     }
 
-    public ArrayList<String> getFilesNames(String startingSymbol) {
+    public ArrayList<String> getFileNames(String startingSymbol) {
         ArrayList<String> filesNames = new ArrayList<>();
 
         for (File item : Objects.requireNonNull(directory.listFiles())) {

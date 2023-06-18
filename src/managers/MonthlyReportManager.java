@@ -8,9 +8,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MonthlyReportManager {
-    private final String directory = "./resources/";
-    private final FileManager fileManager = new FileManager(directory);
-    protected HashMap<String, ArrayList<MonthlyTransactions>> allMonthsReports = new HashMap<>();
+    private final String directory;
+    private final FileManager fileManager;
+    public HashMap<String, ArrayList<MonthlyTransactions>> monthlyReports = new HashMap<>();
+
+    public MonthlyReportManager(FileManager fileManager, String directory) {
+        this.fileManager = fileManager;
+        this.directory = directory;
+    }
 
     private void loadMonthlyFile(String month, String fileName) {
         ArrayList<MonthlyTransactions> monthlyTransactions = new ArrayList<>();
@@ -32,23 +37,25 @@ public class MonthlyReportManager {
                 monthlyTransactions.add(monthlyTransaction);
             }
         }
-        allMonthsReports.put(month, monthlyTransactions);
+        monthlyReports.put(month, monthlyTransactions);
     }
 
     public void readAllMonthlyReports() {
-        ArrayList<String> monthlyFilesNames = fileManager.getFilesNames("m");
+        if (monthlyReports.isEmpty()) {
+            ArrayList<String> monthlyFilesNames = fileManager.getFileNames("m");
 
-        if (monthlyFilesNames.isEmpty())
-            System.out.println("Месячных отчетов в папке " + directory + " не обнаружено");
-        else {
-            for (String monthlyReportName : monthlyFilesNames) {
-                short monthNumber = Converter.getMonthNumberFromFileName(monthlyReportName);
-                String month = Converter.getMonthNameByMonthNumber(monthNumber);
+            if (monthlyFilesNames.isEmpty())
+                System.out.println("Месячных отчетов в папке " + directory + " не обнаружено");
+            else {
+                for (String monthlyReportName : monthlyFilesNames) {
+                    short monthNumber = Converter.getMonthNumberFromFileName(monthlyReportName);
+                    String month = Converter.getMonthNameByMonthNumber(monthNumber);
 
-                loadMonthlyFile(month, monthlyReportName);
+                    loadMonthlyFile(month, monthlyReportName);
+                }
+                System.out.println(InputHandler.ANSI_WHITE + "\n***Ежемесячные отчеты успешно сформированы***\n" + InputHandler.ANSI_WHITE);
             }
-            System.out.println(InputHandler.ANSI_WHITE + "\n***Ежемесячные отчеты успешно сформированы***\n" + InputHandler.ANSI_WHITE);
-        }
+        } else System.out.println(InputHandler.ANSI_RED + "Ежемесячные отчеты уже сформированы" + InputHandler.ANSI_RED);
     }
 
     private HashMap<String, Double> getMostProfitableProduct(String month) {
@@ -56,9 +63,10 @@ public class MonthlyReportManager {
         String mostIncomeItemName = null;
         double maxIncomeAmount = 0;
 
-        for (MonthlyTransactions monthlyTransaction : allMonthsReports.get(month)) {
-            if (monthlyTransaction.isExpense)
+        for (MonthlyTransactions monthlyTransaction : monthlyReports.get(month)) {
+            if (monthlyTransaction.isExpense) {
                 continue;
+            }
             else {
                 double profit = monthlyTransaction.unitPrice * monthlyTransaction.quantity;
                 String itemName = monthlyTransaction.itemName;
@@ -78,7 +86,7 @@ public class MonthlyReportManager {
         String maxExpenseItemName = null;
         double maxExpenseAmount = 0;
 
-        for (MonthlyTransactions monthlyTransaction : allMonthsReports.get(month)) {
+        for (MonthlyTransactions monthlyTransaction : monthlyReports.get(month)) {
             if (monthlyTransaction.isExpense) {
                 double expense = monthlyTransaction.quantity * monthlyTransaction.unitPrice;
                 String itemName = monthlyTransaction.itemName;
@@ -95,22 +103,22 @@ public class MonthlyReportManager {
 
     private void printMaxExpense(HashMap<String, Double> maxExpense) {
         for (String itemName : maxExpense.keySet()) {
-            System.out.print("\nCамая большая трата - " + itemName.toLowerCase() + " (" + maxExpense.get(itemName) + ")\n\n");
+            System.out.print("Cамая большая трата - " + itemName.toLowerCase() + ". Расход составил " + maxExpense.get(itemName) + "\n\n\n");
         }
     }
 
     private void printMostProfitableProduct(HashMap<String, Double> mostProfitableProduct) {
         for (String itemName : mostProfitableProduct.keySet()) {
-            System.out.print("\nCамый прибыльный товар - " + itemName.toLowerCase() + " (" + mostProfitableProduct.get(itemName) + ")\n");
+            System.out.print("Cамый прибыльный товар - " + itemName.toLowerCase() + ". Доход составил " + mostProfitableProduct.get(itemName) + "\n");
         }
     }
 
-    protected HashMap<String, Double> getAllMonthlyIncome() {
+    public HashMap<String, Double> getAllMonthlyIncome() {
         HashMap<String, Double> allMonthlyIncome = new HashMap<>();
 
-        for (String month : allMonthsReports.keySet()) {
+        for (String month : monthlyReports.keySet()) {
             double expenses = 0;
-            for (MonthlyTransactions monthlyTransaction : allMonthsReports.get(month)) {
+            for (MonthlyTransactions monthlyTransaction : monthlyReports.get(month)) {
                 if (!(monthlyTransaction.isExpense)) {
                     expenses += monthlyTransaction.quantity * monthlyTransaction.unitPrice;
                 }
@@ -120,12 +128,12 @@ public class MonthlyReportManager {
         return allMonthlyIncome;
     }
 
-    protected HashMap<String, Double> getAllMontlyExpenses() {
+    public HashMap<String, Double> getAllMonthlyExpenses() {
         HashMap<String, Double> allMonthlyExpenses = new HashMap<>();
 
-        for (String month : allMonthsReports.keySet()) {
+        for (String month : monthlyReports.keySet()) {
             double expenses = 0;
-            for (MonthlyTransactions monthlyTransaction : allMonthsReports.get(month)) {
+            for (MonthlyTransactions monthlyTransaction : monthlyReports.get(month)) {
                 if (monthlyTransaction.isExpense) {
                     expenses += monthlyTransaction.quantity * monthlyTransaction.unitPrice;
                 }
@@ -137,19 +145,20 @@ public class MonthlyReportManager {
 
 
     public void printMonthlyReports() {
-        if (allMonthsReports.isEmpty())
+        if (monthlyReports.isEmpty())
             System.out.println(InputHandler.ANSI_RED + "Отчеты пока не сформированы. Воспользуйтесь для начала командой [1]\n" + InputHandler.ANSI_RED);
         else {
-            for (String month : allMonthsReports.keySet()) {
+            for (String month : monthlyReports.keySet()) {
                 System.out.println(InputHandler.ANSI_WHITE + "***" + month + "***" + InputHandler.ANSI_WHITE);
                 System.out.println("=====================================================");
-                for (MonthlyTransactions monthlyTransaction : allMonthsReports.get(month)) {
+                for (MonthlyTransactions monthlyTransaction : monthlyReports.get(month)) {
                     System.out.println("Название товара: " + monthlyTransaction.itemName.toLowerCase());
                     System.out.println("Количество закупленного или проданного товара: " + monthlyTransaction.quantity);
                     System.out.println("Стоимость одной единицы товара: " + monthlyTransaction.unitPrice);
                     System.out.println("Трата или доход: " + Converter.printIsExpenseOrIncome(monthlyTransaction.isExpense));
                     System.out.println("=====================================================");
                 }
+                System.out.println("ИТОГИ МЕСЯЦА:");
                 printMostProfitableProduct(getMostProfitableProduct(month));
                 printMaxExpense(getMaxExpense(month));
             }

@@ -10,9 +10,4 @@ public class YearlyTransactions {
         this.amount = amount;
         this.isExpense = isExpense;
     }
-
-    public YearlyTransactions(double amount, boolean isExpense) {
-        this.amount = amount;
-        this.isExpense = isExpense;
-    }
 }

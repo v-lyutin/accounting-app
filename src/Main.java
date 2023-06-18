@@ -1,14 +1,10 @@
-import managers.MonthlyReportManager;
-import managers.ReportsCheckerManager;
-import managers.YearlyReportManager;
+import service.ReportsService;
 import utils.InputHandler;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        YearlyReportManager yearlyReportManager = new YearlyReportManager();
-        MonthlyReportManager monthlyReportManager = new MonthlyReportManager();
-        ReportsCheckerManager reportsCheckerManager = new ReportsCheckerManager(yearlyReportManager, monthlyReportManager);
+        ReportsService reportsService = new ReportsService();
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
@@ -18,19 +14,19 @@ public class Main {
 
             switch (command) {
                 case 1:
-                    monthlyReportManager.readAllMonthlyReports();
+                    reportsService.monthlyReportManager.readAllMonthlyReports();
                     break;
                 case 2:
-                    yearlyReportManager.readYearlyReport(scanner);
+                    reportsService.yearlyReportManager.readYearlyReport();
                     break;
                 case 3:
-                    reportsCheckerManager.checkReports();
+                    reportsService.checkReports();
                     break;
                 case 4:
-                    monthlyReportManager.printMonthlyReports();
+                    reportsService.monthlyReportManager.printMonthlyReports();
                     break;
                 case 5:
-                    yearlyReportManager.printYearlyReport();
+                    reportsService.yearlyReportManager.printYearlyReport();
                     break;
                 case 0:
                     scanner.close();
