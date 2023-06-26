@@ -33,7 +33,8 @@ public class MonthlyReportManager {
                 int quantity = Integer.parseInt(parts[2]);
                 double unitPrice = Double.parseDouble(parts[3]);
 
-                MonthlyTransactions monthlyTransaction = new MonthlyTransactions(itemName, isExpense, quantity, unitPrice);
+                MonthlyTransactions monthlyTransaction = new MonthlyTransactions(itemName, isExpense, quantity,
+                        unitPrice);
                 monthlyTransactions.add(monthlyTransaction);
             }
         }
@@ -53,9 +54,11 @@ public class MonthlyReportManager {
 
                     loadMonthlyFile(month, monthlyReportName);
                 }
-                System.out.println(InputHandler.ANSI_WHITE + "\n***Ежемесячные отчеты успешно сформированы***\n" + InputHandler.ANSI_WHITE);
+                System.out.println(InputHandler.ANSI_WHITE + "\n***Ежемесячные отчеты успешно сформированы***\n"
+                        + InputHandler.ANSI_WHITE);
             }
-        } else System.out.println(InputHandler.ANSI_RED + "Ежемесячные отчеты уже сформированы" + InputHandler.ANSI_RED);
+        } else System.out.println(InputHandler.ANSI_RED + "Ежемесячные отчеты уже сформированы"
+                + InputHandler.ANSI_RED);
     }
 
     private HashMap<String, Double> getMostProfitableProduct(String month) {
@@ -103,13 +106,15 @@ public class MonthlyReportManager {
 
     private void printMaxExpense(HashMap<String, Double> maxExpense) {
         for (String itemName : maxExpense.keySet()) {
-            System.out.print("Cамая большая трата - " + itemName.toLowerCase() + ". Расход составил " + maxExpense.get(itemName) + "\n\n\n");
+            System.out.print("Cамая большая трата - " + itemName.toLowerCase() + ". Расход составил "
+                    + maxExpense.get(itemName) + "\n\n\n");
         }
     }
 
     private void printMostProfitableProduct(HashMap<String, Double> mostProfitableProduct) {
         for (String itemName : mostProfitableProduct.keySet()) {
-            System.out.print("Cамый прибыльный товар - " + itemName.toLowerCase() + ". Доход составил " + mostProfitableProduct.get(itemName) + "\n");
+            System.out.print("Cамый прибыльный товар - " + itemName.toLowerCase() + ". Доход составил "
+                    + mostProfitableProduct.get(itemName) + "\n");
         }
     }
 
@@ -146,7 +151,9 @@ public class MonthlyReportManager {
 
     public void printMonthlyReports() {
         if (monthlyReports.isEmpty())
-            System.out.println(InputHandler.ANSI_RED + "Отчеты пока не сформированы. Воспользуйтесь для начала командой [1]\n" + InputHandler.ANSI_RED);
+            System.out.println(InputHandler.ANSI_RED
+                    + "Отчеты пока не сформированы. Воспользуйтесь для начала командой [1]\n"
+                    + InputHandler.ANSI_RED);
         else {
             for (String month : monthlyReports.keySet()) {
                 System.out.println(InputHandler.ANSI_WHITE + "***" + month + "***" + InputHandler.ANSI_WHITE);
@@ -155,7 +162,8 @@ public class MonthlyReportManager {
                     System.out.println("Название товара: " + monthlyTransaction.itemName.toLowerCase());
                     System.out.println("Количество закупленного или проданного товара: " + monthlyTransaction.quantity);
                     System.out.println("Стоимость одной единицы товара: " + monthlyTransaction.unitPrice);
-                    System.out.println("Трата или доход: " + Converter.printIsExpenseOrIncome(monthlyTransaction.isExpense));
+                    System.out.println("Трата или доход: " + Converter.printIsExpenseOrIncome(
+                            monthlyTransaction.isExpense));
                     System.out.println("=====================================================");
                 }
                 System.out.println("ИТОГИ МЕСЯЦА:");

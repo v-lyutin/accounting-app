@@ -38,7 +38,8 @@ public class YearlyReportManager {
                         yearlyTransactions.add(yearlyTransaction);
                     }
                 }
-                System.out.println(InputHandler.ANSI_WHITE + "\n***Ежегодный отчет успешно сформирован***\n" + InputHandler.ANSI_WHITE);
+                System.out.println(InputHandler.ANSI_WHITE + "\n***Ежегодный отчет успешно сформирован***\n"
+                        + InputHandler.ANSI_WHITE);
             }
         } else
             System.out.println(InputHandler.ANSI_RED + "Ежегодный отчет уже сформирован\n" + InputHandler.ANSI_RED);
@@ -79,7 +80,9 @@ public class YearlyReportManager {
 
     public void printYearlyReport() {
         if (yearlyTransactions.isEmpty()) {
-            System.out.println(InputHandler.ANSI_RED + "Годовой отчет пока не сформирован. Воспользуйтесь для начала командой [2]\n" + InputHandler.ANSI_RED);
+            System.out.println(InputHandler.ANSI_RED
+                    + "Годовой отчет пока не сформирован. Воспользуйтесь для начала командой [2]\n"
+                    + InputHandler.ANSI_RED);
         } else {
             ArrayList<String> yearlyFilesNames = fileManager.getFileNames("y");
             int year = Converter.getYearValueByFileName(yearlyFilesNames.get(0));
