@@ -1,6 +1,6 @@
-package managers;
+package manager;
 
-import transactions.YearlyTransactions;
+import model.YearlyTransaction;
 import utils.Converter;
 import utils.FileManager;
 import utils.InputHandler;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class YearlyReportManager {
     private final String directory;
     private final FileManager fileManager;
-    public ArrayList<YearlyTransactions> yearlyTransactions= new ArrayList<>();
+    public ArrayList<YearlyTransaction> yearlyTransactions= new ArrayList<>();
 
     public YearlyReportManager(FileManager fileManager, String directory) {
         this.fileManager = fileManager;
@@ -34,7 +34,7 @@ public class YearlyReportManager {
                         double amount = Double.parseDouble(parts[1]);
                         boolean isExpense = Boolean.parseBoolean(parts[2]);
 
-                        YearlyTransactions yearlyTransaction = new YearlyTransactions(month, amount, isExpense);
+                        YearlyTransaction yearlyTransaction = new YearlyTransaction(month, amount, isExpense);
                         yearlyTransactions.add(yearlyTransaction);
                     }
                 }
@@ -48,7 +48,7 @@ public class YearlyReportManager {
     private int getYearlyAverageIncome() {
         double totalIncome = 0;
         int count = 0;
-        for (YearlyTransactions yearlyTransaction : yearlyTransactions) {
+        for (YearlyTransaction yearlyTransaction : yearlyTransactions) {
             if (yearlyTransaction.isExpense)
                 continue;
             else {
@@ -62,7 +62,7 @@ public class YearlyReportManager {
     private int getYearlyAverageExpense() {
         double totalExpense = 0;
         int count = 0;
-        for (YearlyTransactions yearlyTransaction : yearlyTransactions) {
+        for (YearlyTransaction yearlyTransaction : yearlyTransactions) {
             if (yearlyTransaction.isExpense) {
                 totalExpense += yearlyTransaction.amount;
                 count++;
@@ -72,7 +72,7 @@ public class YearlyReportManager {
     }
 
     private void printMonthlyIncome() {
-        for (YearlyTransactions yearlyTransaction : yearlyTransactions) {
+        for (YearlyTransaction yearlyTransaction : yearlyTransactions) {
             if (!(yearlyTransaction.isExpense))
                 System.out.println("Прибыль за " + yearlyTransaction.month + " составила: " + yearlyTransaction.amount);
         }

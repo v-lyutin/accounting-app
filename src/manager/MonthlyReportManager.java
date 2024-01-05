@@ -1,6 +1,6 @@
-package managers;
+package manager;
 
-import transactions.MonthlyTransactions;
+import model.MonthlyTransaction;
 import utils.Converter;
 import utils.FileManager;
 import utils.InputHandler;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class MonthlyReportManager {
     private final String directory;
     private final FileManager fileManager;
-    public HashMap<String, ArrayList<MonthlyTransactions>> monthlyReports = new HashMap<>();
+    public HashMap<String, ArrayList<MonthlyTransaction>> monthlyReports = new HashMap<>();
 
     public MonthlyReportManager(FileManager fileManager, String directory) {
         this.fileManager = fileManager;
@@ -18,7 +18,7 @@ public class MonthlyReportManager {
     }
 
     private void loadMonthlyFile(String month, String fileName) {
-        ArrayList<MonthlyTransactions> monthlyTransactions = new ArrayList<>();
+        ArrayList<MonthlyTransaction> monthlyTransactions = new ArrayList<>();
 
         ArrayList<String> monthlyReportContent = fileManager.readFileContents(fileName);
         monthlyReportContent.remove(0);
@@ -33,7 +33,7 @@ public class MonthlyReportManager {
                 int quantity = Integer.parseInt(parts[2]);
                 double unitPrice = Double.parseDouble(parts[3]);
 
-                MonthlyTransactions monthlyTransaction = new MonthlyTransactions(itemName, isExpense, quantity,
+                MonthlyTransaction monthlyTransaction = new MonthlyTransaction(itemName, isExpense, quantity,
                         unitPrice);
                 monthlyTransactions.add(monthlyTransaction);
             }
@@ -66,7 +66,7 @@ public class MonthlyReportManager {
         String mostIncomeItemName = null;
         double maxIncomeAmount = 0;
 
-        for (MonthlyTransactions monthlyTransaction : monthlyReports.get(month)) {
+        for (MonthlyTransaction monthlyTransaction : monthlyReports.get(month)) {
             if (monthlyTransaction.isExpense) {
                 continue;
             }
@@ -89,7 +89,7 @@ public class MonthlyReportManager {
         String maxExpenseItemName = null;
         double maxExpenseAmount = 0;
 
-        for (MonthlyTransactions monthlyTransaction : monthlyReports.get(month)) {
+        for (MonthlyTransaction monthlyTransaction : monthlyReports.get(month)) {
             if (monthlyTransaction.isExpense) {
                 double expense = monthlyTransaction.quantity * monthlyTransaction.unitPrice;
                 String itemName = monthlyTransaction.itemName;
@@ -123,7 +123,7 @@ public class MonthlyReportManager {
 
         for (String month : monthlyReports.keySet()) {
             double expenses = 0;
-            for (MonthlyTransactions monthlyTransaction : monthlyReports.get(month)) {
+            for (MonthlyTransaction monthlyTransaction : monthlyReports.get(month)) {
                 if (!(monthlyTransaction.isExpense)) {
                     expenses += monthlyTransaction.quantity * monthlyTransaction.unitPrice;
                 }
@@ -138,7 +138,7 @@ public class MonthlyReportManager {
 
         for (String month : monthlyReports.keySet()) {
             double expenses = 0;
-            for (MonthlyTransactions monthlyTransaction : monthlyReports.get(month)) {
+            for (MonthlyTransaction monthlyTransaction : monthlyReports.get(month)) {
                 if (monthlyTransaction.isExpense) {
                     expenses += monthlyTransaction.quantity * monthlyTransaction.unitPrice;
                 }
@@ -158,7 +158,7 @@ public class MonthlyReportManager {
             for (String month : monthlyReports.keySet()) {
                 System.out.println(InputHandler.ANSI_WHITE + "***" + month + "***" + InputHandler.ANSI_WHITE);
                 System.out.println("=====================================================");
-                for (MonthlyTransactions monthlyTransaction : monthlyReports.get(month)) {
+                for (MonthlyTransaction monthlyTransaction : monthlyReports.get(month)) {
                     System.out.println("Название товара: " + monthlyTransaction.itemName.toLowerCase());
                     System.out.println("Количество закупленного или проданного товара: " + monthlyTransaction.quantity);
                     System.out.println("Стоимость одной единицы товара: " + monthlyTransaction.unitPrice);

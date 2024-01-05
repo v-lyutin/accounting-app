@@ -1,8 +1,8 @@
 package service;
 
-import managers.MonthlyReportManager;
-import managers.YearlyReportManager;
-import transactions.YearlyTransactions;
+import manager.MonthlyReportManager;
+import manager.YearlyReportManager;
+import model.YearlyTransaction;
 import utils.FileManager;
 import utils.InputHandler;
 import java.util.HashMap;
@@ -24,7 +24,7 @@ public class ReportsService {
             HashMap<String, Double> monthlyExpenses = monthlyReportManager.getAllMonthlyExpenses();
             HashMap<String, Double> monthlyIncome = monthlyReportManager.getAllMonthlyIncome();
 
-            for (YearlyTransactions yearlyTransaction : yearlyReportManager.yearlyTransactions) {
+            for (YearlyTransaction yearlyTransaction : yearlyReportManager.yearlyTransactions) {
                 if (yearlyTransaction.isExpense) {
                     if (monthlyExpenses.get(yearlyTransaction.month) == yearlyTransaction.amount)
                         printMatch(yearlyTransaction.month, true);

@@ -10,12 +10,13 @@ public class InputHandler {
     public static int checkInputValue(Scanner scanner) throws InputMismatchException {
         while (true) {
             try {
+                System.out.print(">>> ");
                 int value = scanner.nextInt();
                 if (value >= 0)
                     return value;
                 throw new InputMismatchException();
             } catch (InputMismatchException e) {
-                System.out.println(ANSI_RED + "Ошибка ввода, повторите попытку!" + ANSI_RED);
+                System.err.println("Ошибка ввода, повторите попытку!");
                 scanner.nextLine();
             }
         }
