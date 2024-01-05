@@ -2,7 +2,7 @@ import service.ReportsService;
 import utils.InputHandler;
 import java.util.Scanner;
 
-public class Main {
+public class Application {
     public static void main(String[] args) {
         ReportsService reportsService = new ReportsService();
         Scanner scanner = new Scanner(System.in);
